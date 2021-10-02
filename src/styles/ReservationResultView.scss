@@ -1,0 +1,18 @@
+@import "./veriables";
+
+.reservation-result-view {
+  .reservation-result-message {
+    @include boxStyle();
+    margin: $section-offset-space 0;
+    text-align: center;
+
+    .reservation-result-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      a {
+        @include buttonStyle();
+      }
+    }
+  }
+}

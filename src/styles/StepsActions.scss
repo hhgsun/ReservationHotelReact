@@ -1,0 +1,15 @@
+@import "./veriables";
+
+.steps-actions {
+  @include boxStyle();
+  background-color: $light-color;
+  margin-top: $section-offset-space;
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    @include buttonStyle();
+    padding: 10px 15px;
+    font-size: 1.2em;
+  }
+}

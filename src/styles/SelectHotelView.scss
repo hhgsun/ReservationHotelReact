@@ -1,0 +1,42 @@
+@import "./veriables";
+
+$box-border-size: 2px;
+
+.select-hotel-view {
+  margin-top: $section-offset-space;
+  padding: $section-offset-space;
+  border-radius: $radius-size;
+  border: 2px solid $light-color;
+
+  .hotels-selectbox {
+    margin-bottom: 10px;
+
+    .selectboxhotels__control {
+      border-width: $box-border-size;
+      border-color: $dark-color;
+      box-shadow: none;
+    }
+  }
+
+  .detail-info-wrap {
+    display: flex;
+    justify-content: space-between;
+    
+    label {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      border: $box-border-size solid $dark-color;
+      border-left: none;
+      &:first-child {
+        border-left: $box-border-size solid $dark-color;
+      }
+
+      input {
+        margin-top: 5px;
+        padding:10px 5px;
+      }
+    }
+  }
+}

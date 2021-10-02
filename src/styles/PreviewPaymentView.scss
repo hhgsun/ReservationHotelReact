@@ -1,0 +1,57 @@
+@import "./veriables";
+
+
+.preview-payment-view {
+  display: flex;
+  padding-top: $section-offset-space;
+  gap: $section-offset-space;
+  
+  // PAYMENT
+  .payment-wrap {
+    @include boxStyle();
+    flex-grow: 4;
+    flex-basis: 0;
+    
+    .rccs {
+      width: calc(100%);
+      aspect-ratio: 2/1;
+      zoom: 1.3;
+      margin-bottom: 30px;
+      .rccs__card {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .card-fieldset {
+      padding: $section-offset-space/2 $section-offset-space $section-offset-space $section-offset-space;
+      border-color: $dark-color;
+      border-radius: $radius-size;
+
+      legend {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+      .card-row {
+        display: flex;
+        flex-direction: column;
+        margin: 10px 0;
+        span {
+          margin-bottom: 5px;
+        }
+        input {
+          padding: 5px;
+        }
+      }
+      footer.card-row {
+        flex-direction: row;
+        justify-content: space-between;
+        label {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,26 @@
+// Colors
+$main-color: #073763;
+$light-color: #f2f2f2;
+$dark-color: #252525;
+
+// Sizes
+$offset-space: 2vw;
+$radius-size: 8px;
+$section-offset-space: 30px;
+$root-text-size: 16px;
+
+@mixin boxStyle {
+  border-radius: $radius-size;
+  border: 2px solid $light-color;
+  padding: $section-offset-space;
+}
+
+@mixin buttonStyle {
+  background-color: $main-color;
+  color: $light-color;
+  padding: 5px 10px;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

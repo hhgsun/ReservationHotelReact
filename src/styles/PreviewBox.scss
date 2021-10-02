@@ -1,0 +1,94 @@
+@import "./veriables";
+
+@mixin miniBoxStyle {
+  border-radius: $radius-size;
+  padding: calc(#{$section-offset-space} - 10px) $section-offset-space;
+  background-color: #fff;
+}
+
+// PREVIEW
+.preview-wrap {
+  @include boxStyle();
+  flex-grow: 3;
+  flex-basis: 0;
+  background-color: $light-color;
+
+  h2 {
+    margin-top: 0;
+    small {
+      margin-left: 10px;
+      font-weight: normal;
+    }
+  }
+
+  .detail-items {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: calc(#{$section-offset-space} - 10px);
+
+    .detail-item {
+      width: calc(50% - (#{$section-offset-space} * 2) - 10px);
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      @include miniBoxStyle();
+      b {
+        margin-bottom: 5px;
+      }
+    }
+  }
+
+  .coupon-area {
+    @include miniBoxStyle();
+    margin-top: $section-offset-space;
+    display: flex;
+    gap: 10px;
+    input {
+      width: 100%;
+      padding: 10px;
+    }
+    button {
+      @include buttonStyle();
+      min-width: 100px;
+      &:disabled {
+        opacity: 0.4;
+      }      
+    }
+  }
+  .coupon-fail-message {
+    @include miniBoxStyle();
+    margin-top: -15px;
+  }
+
+  .prices {
+    @include miniBoxStyle();
+    margin-top: $section-offset-space;
+    display: flex;
+    flex-direction: column;
+    .line-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .divider {
+      height: 2px;
+      background-color: $light-color;
+      margin-left: -$section-offset-space;
+      margin-right: -$section-offset-space;
+    }
+    .total {
+      padding-top: calc(#{$section-offset-space} - 10px);
+      text-align: center;
+      font-size: 1.4em;
+      h3 {
+        margin:0 0 15px 0;
+        font-size: .9em;
+      }
+      h2 {
+        margin: 0;
+      }
+    }
+  }
+
+}
