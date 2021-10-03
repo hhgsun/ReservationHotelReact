@@ -1,5 +1,6 @@
 @import "./veriables";
 
+$gap-card-fields: 15px;
 
 .preview-payment-view {
   display: flex;
@@ -26,6 +27,10 @@
       }
       @include breakpoint(sm) {
         width: auto;
+        zoom: 1.1;
+      }
+      @include breakpoint(300px) {
+        zoom: 1;
       }
       .rccs__card {
         width: 100%;
@@ -37,43 +42,67 @@
       padding: $section-offset-space/2 $section-offset-space $section-offset-space $section-offset-space;
       border-color: $dark-color;
       border-radius: $radius-size;
+      display: flex;
+      flex-direction: column;
+      gap: $gap-card-fields;
 
       @include breakpoint(sm) {
         padding: $section-offset-space/2;
+        padding-top: $section-offset-space/3;
       }
 
       legend {
         font-size: 1.5em;
         font-weight: bold;
       }
+      input, select {
+        padding: $gap-card-fields * 0.7;
+      }
       .card-row {
         display: flex;
         flex-direction: column;
-        margin: 10px 0;
-        span {
-          margin-bottom: 5px;
-        }
-        input, select {
-          padding: 5px;
-        }
+        gap: $gap-card-fields * 0.3;
       }
-      footer.card-row, footer .card-row {
+      footer.card-row {
+        display: flex;
         flex-direction: row;
         justify-content: space-between;
         @include breakpoint(sm) {
           flex-direction: column;
-          &>div div.card-row {
-            flex-direction: row;
-            justify-content: flex-start;
-            gap: 0 10px;
-          }
+          gap: $gap-card-fields;
         }
-        label {
+
+        .card-dates {
           display: flex;
           flex-direction: column;
-          @include breakpoint(sm) {
-            width: 100%;
+          gap: $gap-card-fields * 0.3;
+          justify-content: space-between;
+          .card-row {
+            flex-direction: row;
+            label {
+              width: 100%;
+              select {
+                width: 100%;
+              }
+            }
           }
+        }
+
+        label.card-cvv {
+          display: flex;
+          flex-direction: column;
+          gap: $gap-card-fields * 0.3;
+        }
+      }
+
+      .error-info {
+        margin-bottom: -10px;
+        display: none;
+        font-weight: bold;
+      }
+      &.error-input {
+        .error-info {
+          display: block;
         }
       }
     }

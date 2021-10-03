@@ -1,27 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { jumpStep, selectCompletedSteps, selectStep } from '../store/registrySlice';
+import { selectStep } from '../store/registrySlice';
 import "../styles/StepsNav.scss";
 
-export default function Navigation() {
+export default function StepsNavigation({ goStepNumber }) {
   const step = useSelector(selectStep)
-  const completedSteps = useSelector(selectCompletedSteps)
-  const dispatch = useDispatch();
-
-  const goStepNumber = (num) => {
-    if (num === 0) {
-      dispatch(jumpStep(num));
-    }
-    if (num === 1 && completedSteps[0]) {
-      dispatch(jumpStep(num));
-      return;
-    }
-    if (num === 2 && completedSteps[0] && completedSteps[1]) {
-      dispatch(jumpStep(num));
-      return;
-    }
-  }
 
   return (
     <div className="steps-navigation">

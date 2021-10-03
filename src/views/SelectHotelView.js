@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import Select from 'react-select'
 import LoadingBox from '../components/LoadingBox';
-import { selectReservation, setCompletedStep, updateReservation } from '../store/registrySlice';
+import { selectHasRequestGoStep, selectReservation, setCompletedStep, updateReservation } from '../store/registrySlice';
 import { getHotelNames, selectHotelDetailById, selectHotelNames, selectHotelNamesStatus, STATUS } from '../store/reservationSlice';
 import "../styles/SelectHotelView.scss"
 import { dateAddDay } from '../utils/dateUtils';
@@ -17,6 +17,8 @@ export default function SelectHotelView() {
   const reservation = useSelector(selectReservation);
 
   const hotelDetail = useSelector(state => selectHotelDetailById(state, reservation.hotel_id));
+
+  const hasRequestGoStep = useSelector(selectHasRequestGoStep)
 
   const [comboboxHotel, setComboboxHotel] = useState(() => {
     const hotel = hotelNames.find(h => h.id === reservation.hotel_id);
@@ -43,6 +45,12 @@ export default function SelectHotelView() {
   }, [dispatch, hotelNamesStatus])
 
   useEffect(() => {
+    if (reservation.hotel_id === "" && comboboxHotel && comboboxHotel.value !== "") {
+      setComboboxHotel(null)
+    }
+  }, [reservation, comboboxHotel])
+
+  useEffect(() => {
     if (hotelDetail && reservation) {
       if (reservation.adult > hotelDetail.max_adult_size && reservation.adult !== "") {
         dispatch(updateReservation({
@@ -60,7 +68,7 @@ export default function SelectHotelView() {
         }));
       }
     }
-  }, [hotelDetail, reservation, dispatch])
+  }, [hotelDetail, reservation, dispatch]);
 
   const handleReservationInput = (e) => {
     const { name, value } = e.target;
@@ -69,9 +77,11 @@ export default function SelectHotelView() {
     }));
   }
 
+  const placeholderSelectBox = "Rezervasyon yapmak istediğiniz oteli seçiniz.";
+
   const handleSelectHotel = (v) => {
     if (v == null) {
-      v = { value: "", label: "" }
+      v = { value: "", label: placeholderSelectBox }
     }
     setComboboxHotel(v);
     dispatch(updateReservation({
@@ -85,11 +95,12 @@ export default function SelectHotelView() {
 
   return (
     <div className="select-hotel-view">
-      <div className="hotels-selectbox">
+
+      <div className={`hotels-selectbox ${hasRequestGoStep !== 0 && reservation.hotel_id === "" ? 'error-input' : ''}`}>
         <Select
           options={hotelNames.map((h) => ({ value: h.id, label: h.hotel_name }))}
           classNamePrefix="selectboxhotels"
-          placeholder="Rezervasyon yapmak istediğiniz oteli seçiniz."
+          placeholder={placeholderSelectBox}
           value={comboboxHotel}
           onChange={(v) => handleSelectHotel(v)}
           theme={(theme) => ({
@@ -113,6 +124,7 @@ export default function SelectHotelView() {
             type="date" name="start_date"
             value={reservation.start_date} onChange={(e) => handleReservationInput(e)} disabled={hotelDetail == null}
             min={new Date().toISOString().split('T')[0]}
+            className={hasRequestGoStep && reservation.hotel_id !== "" && reservation.start_date === "" ? 'error-input' : ''}
           />
         </label>
 
@@ -122,25 +134,28 @@ export default function SelectHotelView() {
             type="date" name="end_date"
             value={reservation.end_date} onChange={(e) => handleReservationInput(e)} disabled={hotelDetail == null}
             min={reservation.start_date ? dateAddDay(reservation.start_date) : new Date().toISOString().split('T')[0]}
+            className={hasRequestGoStep && reservation.hotel_id !== "" && reservation.end_date === "" ? 'error-input' : ''}
           />
         </label>
 
         <label>
           <span>Yetişkin Sayısı</span>
-          <input type="number" name="adult"
-            value={reservation.adult} onChange={(e) => handleReservationInput(e)}
-            disabled={hotelDetail == null}
-            min="1" max={hotelDetail != null ? hotelDetail.max_adult_size : "5"}
-          />
+          <select name="adult" defaultValue={reservation.adult} onChange={(e) => handleReservationInput(e)}
+            className={hasRequestGoStep && reservation.adult !== "" && reservation.adult === "" ? 'error-input' : ''}>
+            {hotelDetail
+              ? Array.from(Array(hotelDetail.max_adult_size - 1).keys()).map((y) => <option key={y + 1} value={y + 1}>{y + 1} Kişi</option>)
+              : <></>}
+          </select>
         </label>
 
         <label>
           <span>Çocuk Sayısı</span>
-          <input type="number" name="child"
-            value={reservation.child} onChange={(e) => handleReservationInput(e)}
-            disabled={hotelDetail == null || !hotelDetail.child_status}
-            min="0" max="5"
-          />
+          <select name="adult" defaultValue={reservation.child} onChange={(e) => handleReservationInput(e)}
+            disabled={hotelDetail == null || !hotelDetail.child_status}>
+            {hotelDetail
+              ? Array.from(Array(5).keys()).map((y) => <option key={y} value={y}>{y} Çocuk</option>)
+              : <></>}
+          </select>
         </label>
 
       </div>

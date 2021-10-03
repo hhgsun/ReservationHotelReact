@@ -3,7 +3,7 @@ import Cards from 'react-credit-cards'
 import "react-credit-cards/lib/styles.scss"
 import { useDispatch, useSelector } from 'react-redux'
 import PreviewBox from '../components/PreviewBox'
-import { selectReservation, setCompletedStep, updateReservation } from '../store/registrySlice'
+import { selectHasRequestGoStep, selectReservation, setCompletedStep, updateReservation } from '../store/registrySlice'
 import { selectCouponStatus, STATUS } from '../store/reservationSlice'
 
 import "../styles/PreviewPaymentView.scss"
@@ -16,6 +16,8 @@ export default function PreviewPaymentView() {
   const reservation = useSelector(selectReservation)
 
   const couponStatus = useSelector(selectCouponStatus)
+
+  const hasRequestGoStep = useSelector(selectHasRequestGoStep)
 
   const [cardData, setCardData] = useState({
     name: reservation.card_name ?? "",
@@ -106,7 +108,10 @@ export default function PreviewPaymentView() {
           placeholders={{ name: "AD SOYAD" }}
         />
 
-        <fieldset className="card-fieldset">
+        <fieldset className={`card-fieldset ${hasRequestGoStep === 3
+          && (reservation.card_name === '' || reservation.card_number === '' || reservation.card_date_month === '' || reservation.card_date_year === '' || reservation.card_cvv === '')
+          ? 'error-input'
+          : ''}`}>
           <legend>Kredi Kartı Bilgileri</legend>
 
           <label className="card-row">
@@ -117,6 +122,7 @@ export default function PreviewPaymentView() {
               value={cardData.name}
               onChange={(e) => handleCardInputChange(e)}
               onFocus={(e) => handleInputFocus(e)}
+              className={hasRequestGoStep === 3 && reservation.card_name === '' ? 'error-input' : ''}
             />
           </label>
 
@@ -128,27 +134,18 @@ export default function PreviewPaymentView() {
               value={cardData.number}
               onChange={(e) => handleCardInputChange(e)}
               onFocus={(e) => handleInputFocus(e)}
+              className={hasRequestGoStep === 3 && reservation.card_number === '' ? 'error-input' : ''}
             />
           </label>
 
           <footer className="card-row">
-            {/* <label>
-              <span>Kartın Son Kullanma Tarihi</span>
-              <input
-                placeholder="AY/YIL"
-                name="expiry"
-                value={cardData.expiry}
-                onChange={(e) => handleCardInputChange(e)}
-                onFocus={(e) => handleInputFocus(e)}
-              />
-            </label> */}
-
-            <div>
+            <div className="card-dates">
               <span>Kartın Son Kullanma Tarihi </span>
               <div className="card-row">
                 <label>
                   <select name="card_date_month" defaultValue={cardData.card_date_month}
-                    onChange={(e) => changeCardDate(e)} onFocus={(e) => handleInputFocus(e)}>
+                    onChange={(e) => changeCardDate(e)} onFocus={(e) => handleInputFocus(e)}
+                    className={hasRequestGoStep === 3 && reservation.card_date_month === '' ? 'error-input' : ''}>
                     <option value="" disabled={true}>AY</option>
                     {dateMonthsStrList.map(m =>
                       <option key={m} value={m}>
@@ -159,7 +156,8 @@ export default function PreviewPaymentView() {
                 </label>
                 <label>
                   <select name="card_date_year" defaultValue={cardData.card_date_year}
-                    onChange={(e) => changeCardDate(e)} onFocus={(e) => handleInputFocus(e)}>
+                    onChange={(e) => changeCardDate(e)} onFocus={(e) => handleInputFocus(e)}
+                    className={hasRequestGoStep === 3 && reservation.card_date_year === '' ? 'error-input' : ''}>
                     <option value="" disabled={true}>YIL</option>
                     {dateYearsStrList().map(y =>
                       <option key={y} value={y}>
@@ -171,7 +169,7 @@ export default function PreviewPaymentView() {
               </div>
             </div>
 
-            <label>
+            <label className="card-cvv">
               <span>CVC</span>
               <input
                 placeholder="CVV"
@@ -179,9 +177,14 @@ export default function PreviewPaymentView() {
                 value={cardData.cvc}
                 onChange={(e) => handleCardInputChange(e)}
                 onFocus={(e) => handleInputFocus(e)}
+                className={hasRequestGoStep === 3 && reservation.card_cvv === '' ? 'error-input' : ''}
               />
             </label>
           </footer>
+
+          <div className="error-info">
+            <b>! Lütfen bilgilerinizi eksiksiz giriniz</b>
+          </div>
 
         </fieldset>
       </div>

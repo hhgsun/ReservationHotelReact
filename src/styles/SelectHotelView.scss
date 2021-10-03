@@ -35,22 +35,16 @@ $box-border-size: 2px;
       display: flex;
       flex-direction: column;
       padding: 10px;
-      //border: $box-border-size solid $dark-color;
-      /* border-left: none;
-      @include breakpoint(md) {
-        border-left: $box-border-size solid $dark-color;
-        border-top: 0;
-      }
-      &:first-child {
-        border-left: $box-border-size solid $dark-color;
-        @include breakpoint(md) {
-          border-top: $box-border-size solid $dark-color;
-        }
-      } */
+      justify-content: center;
+      align-items: stretch;
 
-      input {
+      input, select {
         margin-top: 5px;
         padding:10px 5px;
+        width: calc(100% - 15px);
+      }
+      select {
+        width: auto;
       }
     }
   }

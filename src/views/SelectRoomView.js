@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingBox from '../components/LoadingBox';
 import TotalPrice from '../components/TotalPrice';
-import { selectReservation, setCompletedStep, updateReservation } from '../store/registrySlice';
+import { selectHasRequestGoStep, selectReservation, setCompletedStep, updateReservation } from '../store/registrySlice';
 import { getHotelNames, selectHotelDetailById, selectHotelNameById } from '../store/reservationSlice';
 import "../styles/SelectRoomView.scss"
 import { dateDiff, dateFormat } from '../utils/dateUtils';
@@ -13,6 +13,7 @@ export default function SelectRoomView() {
 
   const hotelName = useSelector(state => selectHotelNameById(state, reservation.hotel_id));
   const hotelDetail = useSelector(state => selectHotelDetailById(state, reservation.hotel_id));
+  const hasRequestGoStep = useSelector(selectHasRequestGoStep)
 
   const canSave = [
     reservation.room_type,
@@ -56,7 +57,7 @@ export default function SelectRoomView() {
       </div>
 
       <h2>Oda Tipi Seçimi</h2>
-      <div className="options-wrap">
+      <div className={`options-wrap ${hasRequestGoStep !== 1 && hasRequestGoStep !== 0 && reservation.room_type === '' ? 'error-input' : ''}`}>
         {
           hotelDetail.room_type.map((room) =>
             <OptionItem
@@ -80,7 +81,7 @@ export default function SelectRoomView() {
       </div>
 
       <h2>Manzara Seçimi</h2>
-      <div className="options-wrap">
+      <div className={`options-wrap ${hasRequestGoStep !== 1 && hasRequestGoStep !== 0 && reservation.room_scenic === '' ? 'error-input' : ''}`}>
         {
           hotelDetail.room_scenic.map((scen) =>
             <OptionItem

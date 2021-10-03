@@ -22,6 +22,7 @@ const localReservationData = JSON.parse(localStorage.getItem('reservation'));
 
 const initialState = {
   reservation: localReservationData ?? initialReservationData,
+  reservationPrice: 0,
   step: localReservationData
     ? localReservationData.id ? 3 : (Number(localStorage.getItem('step')) ?? 0)
     : 0,
@@ -30,7 +31,7 @@ const initialState = {
     1: false,
     2: false
   },
-  reservationPrice: 0,
+  hasRequestGoStep: 0,
 };
 
 export const registrySlice = createSlice({
@@ -52,17 +53,21 @@ export const registrySlice = createSlice({
       state.completedSteps[payload.step] = payload.completed;
       localStorage.setItem("completedSteps", JSON.stringify(state.completedSteps));
     },
+    setHasRequestGoStep: (state, { payload }) => {
+      state.hasRequestGoStep = payload;
+    },
     setReservationPrice: (state, { payload }) => {
       state.reservationPrice = payload;
-    }
+    },
   },
 });
 
-export const { updateReservation, jumpStep, setCompletedStep, setReservationPrice } = registrySlice.actions;
+export const { updateReservation, jumpStep, setCompletedStep, setReservationPrice, setHasRequestGoStep } = registrySlice.actions;
 
 export const selectReservation = (state) => state.registry.reservation;
+export const selectReservationPrice = (state) => state.registry.reservationPrice;
 export const selectStep = (state) => state.registry.step;
 export const selectCompletedSteps = (state) => state.registry.completedSteps;
-export const selectReservationPrice = (state) => state.registry.reservationPrice;
+export const selectHasRequestGoStep = (state) => state.registry.hasRequestGoStep;
 
 export default registrySlice.reducer;
