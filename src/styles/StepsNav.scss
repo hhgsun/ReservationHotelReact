@@ -9,13 +9,19 @@ $notselect-color: darken($light-color, 30%);
   background-color: $light-color;
   border-radius: $radius-size;
   text-align: center;
+  @include breakpoint(sm) {
+    margin-top: 30px;
+  }
 
   ul {
     position: relative;
     display: flex;
     justify-content: space-evenly;
-    padding: 20px;
-
+    padding: $section-offset-space - 10px;
+    @include breakpoint(sm) {
+      zoom: 0.7;
+      padding: $section-offset-space - 10px $section-offset-space - 25px;
+    }
     &::after {
       content: "";
       position: absolute;
@@ -23,6 +29,9 @@ $notselect-color: darken($light-color, 30%);
       height: 1.5px;
       top: 68px;
       background-color: $notselect-color;
+      @include breakpoint(sm) {
+        top: 60px;
+      }
     }
 
     li {
@@ -53,6 +62,10 @@ $notselect-color: darken($light-color, 30%);
         background-color: desaturate($color: #fff, $amount: 100%);
         border: 2px solid $notselect-color;
         margin: 0 auto;
+        @include breakpoint(sm) {
+          width: 75px;
+          height: 75px;
+        }
 
         img {
           object-fit: contain;
@@ -62,6 +75,9 @@ $notselect-color: darken($light-color, 30%);
           transform: translate(-50%, -50%);
           width: 50%;
           filter: contrast(0.1);
+          @include breakpoint(sm) {
+            width: 60%;
+          }
         }
       }
 

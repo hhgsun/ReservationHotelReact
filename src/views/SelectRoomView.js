@@ -48,10 +48,10 @@ export default function SelectRoomView() {
           <small>({hotelDetail.city})</small>
         </h2>
         <div className="info-hotel-details">
-          <b>Giriş Tarihi:</b> {dateFormat(reservation.start_date)}
-          <b>Çıkış Tarihi:</b> {dateFormat(reservation.end_date)}
-          <b>Yetişkin:</b> {reservation.adult}
-          <b>Çocuk:</b> {(reservation.child && reservation.child !== "0") ? reservation.child : 'YOK'}
+          <span><b>Giriş Tarihi:</b> {dateFormat(reservation.start_date)}</span>
+          <span><b>Çıkış Tarihi:</b> {dateFormat(reservation.end_date)}</span>
+          <span><b>Yetişkin:</b> {reservation.adult}</span>
+          <span><b>Çocuk:</b> {(reservation.child && reservation.child !== "0") ? reservation.child : 'YOK'}</span>
         </div>
       </div>
 

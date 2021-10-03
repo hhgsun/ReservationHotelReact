@@ -4,6 +4,9 @@
   border-radius: $radius-size;
   padding: calc(#{$section-offset-space} - 10px) $section-offset-space;
   background-color: #fff;
+  @include breakpoint(lg) {
+    padding: calc(#{$section-offset-space} * 0.4);
+  }
 }
 
 // PREVIEW
@@ -25,7 +28,11 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: calc(#{$section-offset-space} - 10px);
+    gap: calc(#{$section-offset-space} * 0.5);
+    @include breakpoint(lg) {
+      justify-content:center;
+      gap: calc(#{$section-offset-space} * 0.2);
+    }
 
     .detail-item {
       width: calc(50% - (#{$section-offset-space} * 2) - 10px);
@@ -33,6 +40,9 @@
       flex-direction: column;
       text-align: center;
       @include miniBoxStyle();
+      @include breakpoint(lg) {
+        width: calc(50% - (#{$section-offset-space}));
+      }
       b {
         margin-bottom: 5px;
       }

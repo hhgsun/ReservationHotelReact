@@ -6,17 +6,27 @@
   padding-top: $section-offset-space;
   gap: $section-offset-space;
   
+  @include breakpoint(md) {
+    flex-direction: column-reverse;
+  }
+
   // PAYMENT
   .payment-wrap {
     @include boxStyle();
     flex-grow: 4;
     flex-basis: 0;
-    
+
     .rccs {
       width: calc(100%);
       aspect-ratio: 2/1;
       zoom: 1.3;
       margin-bottom: 30px;
+      @include breakpoint(md) {
+        width: 300px;
+      }
+      @include breakpoint(sm) {
+        width: auto;
+      }
       .rccs__card {
         width: 100%;
         height: 100%;
@@ -27,6 +37,10 @@
       padding: $section-offset-space/2 $section-offset-space $section-offset-space $section-offset-space;
       border-color: $dark-color;
       border-radius: $radius-size;
+
+      @include breakpoint(sm) {
+        padding: $section-offset-space/2;
+      }
 
       legend {
         font-size: 1.5em;
@@ -46,9 +60,20 @@
       footer.card-row, footer .card-row {
         flex-direction: row;
         justify-content: space-between;
+        @include breakpoint(sm) {
+          flex-direction: column;
+          &>div div.card-row {
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 0 10px;
+          }
+        }
         label {
           display: flex;
           flex-direction: column;
+          @include breakpoint(sm) {
+            width: 100%;
+          }
         }
       }
     }

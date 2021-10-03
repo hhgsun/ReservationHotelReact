@@ -10,6 +10,9 @@
       display: flex;
       justify-content: center;
       gap: 15px;
+      @include breakpoint(sm) {
+        flex-direction: column;
+      }
       a {
         @include buttonStyle();
       }

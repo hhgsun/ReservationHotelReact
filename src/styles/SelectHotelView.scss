@@ -8,6 +8,10 @@ $box-border-size: 2px;
   border-radius: $radius-size;
   border: 2px solid $light-color;
 
+  @include breakpoint(md) {
+    padding: $section-offset-space / 2;
+  }
+
   .hotels-selectbox {
     margin-bottom: 10px;
 
@@ -21,17 +25,28 @@ $box-border-size: 2px;
   .detail-info-wrap {
     display: flex;
     justify-content: space-between;
+
+    @include breakpoint(md) {
+      flex-direction: column;
+    }
     
     label {
-      width: 100%;
+      width: calc(100% - 20px - (#{$box-border-size} * 2));
       display: flex;
       flex-direction: column;
       padding: 10px;
-      border: $box-border-size solid $dark-color;
-      border-left: none;
+      //border: $box-border-size solid $dark-color;
+      /* border-left: none;
+      @include breakpoint(md) {
+        border-left: $box-border-size solid $dark-color;
+        border-top: 0;
+      }
       &:first-child {
         border-left: $box-border-size solid $dark-color;
-      }
+        @include breakpoint(md) {
+          border-top: $box-border-size solid $dark-color;
+        }
+      } */
 
       input {
         margin-top: 5px;

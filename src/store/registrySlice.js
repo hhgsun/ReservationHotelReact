@@ -22,7 +22,9 @@ const localReservationData = JSON.parse(localStorage.getItem('reservation'));
 
 const initialState = {
   reservation: localReservationData ?? initialReservationData,
-  step: localReservationData.id ? 3 : (Number(localStorage.getItem('step')) ?? 0),
+  step: localReservationData
+    ? localReservationData.id ? 3 : (Number(localStorage.getItem('step')) ?? 0)
+    : 0,
   completedSteps: JSON.parse(localStorage.getItem('completedSteps')) ?? {
     0: false,
     1: false,

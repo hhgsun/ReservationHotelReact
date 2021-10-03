@@ -9,10 +9,37 @@ $radius-size: 8px;
 $section-offset-space: 30px;
 $root-text-size: 16px;
 
+// Breakpoints
+$screen-sm: 575.98px;
+$screen-md: 767.98px;
+$screen-lg: 991.98px;
+$screen-xl: 1199.98px;
+
+@mixin breakpoint($point) {
+  @if $point == xl {
+    @media (max-width: $screen-xl) { @content; }
+  }
+  @else if $point == lg {
+    @media (max-width: $screen-lg) { @content; }
+  }
+  @else if $point == md {
+    @media (max-width: $screen-md) { @content; }
+  }
+  @else if $point == sm {
+    @media (max-width: $screen-sm)  { @content; }
+  }
+  @else {
+    @media (max-width: $point)  { @content; }
+  }
+}
+
 @mixin boxStyle {
   border-radius: $radius-size;
   border: 2px solid $light-color;
   padding: $section-offset-space;
+  @include breakpoint(lg) {
+    padding: calc(#{$section-offset-space} * 0.4);
+  }
 }
 
 @mixin buttonStyle {
