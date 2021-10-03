@@ -73,14 +73,11 @@ export default function PreviewBox({ isHiddenCouponInput = true }) {
         </div>
       </div>
 
-      {
-        isHiddenCouponInput
-          ? <></>
-          : <CouponField
-            reservationCouponCode={reservation.coupon_code}
-            setReservationCouponCode={setReservationCouponCode}
-          />
-      }
+      <CouponField
+        reservationCouponCode={reservation.coupon_code}
+        setReservationCouponCode={setReservationCouponCode}
+        hiddenInput={isHiddenCouponInput}
+      />
 
       <div className="prices">
         <div className="line-item">
@@ -93,13 +90,6 @@ export default function PreviewBox({ isHiddenCouponInput = true }) {
         </div>
         <div className="line-item">
           <b>Konaklama ({dateDiff(reservation.end_date, reservation.start_date)} Gün)</b>
-          {/* {displayPriceFormat(
-            calcSubTotalPrice(
-              roomDetail.price,
-              reservation.adult,
-              dateDiff(reservation.end_date, reservation.start_date)
-            ))} */}
-
           <TotalPrice
             subTotal={true}
             start_date={reservation.start_date}
@@ -108,34 +98,31 @@ export default function PreviewBox({ isHiddenCouponInput = true }) {
             price={roomDetail.price}
           /> TL
         </div>
+
         {
-          coupon && coupon.discount_ammount && reservation.coupon_code !== ""
-            ? <div className="line-item">
+          reservation.coupon_code !== "" && coupon && coupon.discount_ammount
+            ?
+            <div className="line-item">
               <div>
-                <b>İndirim ({coupon.code})</b>
+                <b>İndirim ({coupon.code ?? reservation.coupon_code})</b>
                 {
                   isHiddenCouponInput
                     ? <></>
-                    : <button type="button" className="btn" onClick={() => couponCancel()} disabled={reservation.coupon_code === ""}>
+                    : <button type="button" className="btn" onClick={() => couponCancel()}>
                       İPTAL ET
                     </button>
                 }
               </div>
-              -{coupon.discount_ammount} TL
-            </div>
-            : <></>
+              {
+                coupon.discount_ammount ? <>-{coupon.discount_ammount} TL</> : <></>
+              }
+            </div> : <></>
         }
 
         <div className="divider"></div>
         <div className="total">
           <h3>Toplam Tutar</h3>
-          <h2>{/* {displayPriceFormat(
-            calcTotalPrice(roomDetail.price,
-              reservation.adult,
-              dateDiff(reservation.end_date, reservation.start_date),
-              scenicDetail.price_rate,
-              reservation.coupon_code !== "" ? coupon.discount_ammount : 0
-            ))} */}
+          <h2>
             <TotalPrice
               start_date={reservation.start_date}
               end_date={reservation.end_date}

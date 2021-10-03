@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCoupon, selectCoupon, selectCouponStatus, STATUS } from '../store/reservationSlice';
 
-export default function CouponField({ reservationCouponCode, setReservationCouponCode }) {
+export default function CouponField({ reservationCouponCode, setReservationCouponCode, hiddenInput = false }) {
 
   const dispatch = useDispatch();
 
@@ -10,8 +10,6 @@ export default function CouponField({ reservationCouponCode, setReservationCoupo
   const couponStatus = useSelector(selectCouponStatus);
 
   const [code, setCode] = useState(reservationCouponCode ? reservationCouponCode : "")
-
-
 
   useEffect(() => {
     if (couponStatus === STATUS.idle && reservationCouponCode !== "") {
@@ -24,6 +22,10 @@ export default function CouponField({ reservationCouponCode, setReservationCoupo
   const submitCode = () => {
     setReservationCouponCode(code);
     dispatch(getCoupon(code));
+  }
+
+  if (hiddenInput) {
+    return <></>;
   }
 
   return (
