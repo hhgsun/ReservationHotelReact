@@ -1,7 +1,7 @@
-HHGSUN:
+# HHGSUN:
 
-https://5f6d939160cf97001641b049.mockapi.io/tkn/coupons?code=CODE10
-https://5f6d939160cf97001641b049.mockapi.io/tkn/coupons?code=CODE100
+https://.../coupons?code=CODE10
+https://.../coupons?code=CODE100
 
 kupon kodları (CODE10, CODE100) farklı olmasına rağmen aynı sonucu veriyor.
 
