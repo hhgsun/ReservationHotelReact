@@ -8,6 +8,10 @@
   background-color: $main-color;
   color: #fff;
 
+  @include breakpoint(sm) {
+    zoom: 0.9;
+  }
+
   .brand {
     text-align: left;
     h1 {
@@ -20,6 +24,7 @@
   }
 
   nav a {
-    @include buttonStyle()
+    @include buttonStyle();
+    white-space: nowrap;
   }
 }

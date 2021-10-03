@@ -1,10 +1,10 @@
-# HHGSUN:
-
-https://.../coupons?code=CODE10
+# Hasan Hüseyin GÜNEŞ:
+https://.../coupons?code=CODE10 , 
 https://.../coupons?code=CODE100
-
 kupon kodları (CODE10, CODE100) farklı olmasına rağmen aynı sonucu veriyor.
 
+
+## --
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
