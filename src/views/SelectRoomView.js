@@ -73,6 +73,7 @@ export default function SelectRoomView() {
                 end_date={reservation.end_date}
                 adult={reservation.adult}
                 price={room.price}
+                isExc={true}
               />}
               handleOptionInput={handleOptionInput}
               currentVal={reservation.room_type}

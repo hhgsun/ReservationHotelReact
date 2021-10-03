@@ -4,7 +4,7 @@ import { setReservationPrice } from '../store/registrySlice';
 import { dateDiff } from '../utils/dateUtils'
 import { calcSubTotalPrice, calcTotalPrice, displayPriceFormat } from '../utils/priceUtils'
 
-export default function TotalPrice({ subTotal = false, start_date, end_date, adult, price, price_rate, discount_ammount = 0 }) {
+export default function TotalPrice({ subTotal = false, start_date, end_date, adult, price, price_rate, discount_ammount = 0, isExc = false }) {
   const [total, setTotal] = useState(0)
 
   const dispatch = useDispatch();
@@ -29,5 +29,5 @@ export default function TotalPrice({ subTotal = false, start_date, end_date, adu
 
   }, [dispatch, subTotal, start_date, end_date, adult, price, price_rate, discount_ammount]);
 
-  return <>{total.toString()}</>;
+  return <>{total.toString()}{isExc ? " TL" : ""}</>;
 }
