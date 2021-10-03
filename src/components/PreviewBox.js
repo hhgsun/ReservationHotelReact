@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectReservation } from '../store/registrySlice';
+import { selectReservation, updateReservation } from '../store/registrySlice';
 import { getHotelNames, selectCoupon, selectHotelDetailById, selectHotelNameById, selectRoomAndScenicDetail } from '../store/reservationSlice';
 import "../styles/PreviewBox.scss"
 import { dateDiff, dateFormat } from '../utils/dateUtils';
-import { calcSubTotalPrice, calcTotalPrice, displayPriceFormat } from '../utils/priceUtils';
+import { displayPriceFormat } from '../utils/priceUtils';
 import CouponField from './CouponField';
 import LoadingBox from './LoadingBox';
+import TotalPrice from './TotalPrice';
 
 export default function PreviewBox({ isHiddenCouponInput = true }) {
 
@@ -30,6 +31,18 @@ export default function PreviewBox({ isHiddenCouponInput = true }) {
 
   if (!hotelDetail || !roomDetail || !scenicDetail) {
     return <LoadingBox />
+  }
+
+  const couponCancel = () => {
+    dispatch(updateReservation({
+      coupon_code: ""
+    }));
+  }
+
+  const setReservationCouponCode = (code) => {
+    dispatch(updateReservation({
+      coupon_code: code
+    }));
   }
 
   return (
@@ -61,8 +74,12 @@ export default function PreviewBox({ isHiddenCouponInput = true }) {
       </div>
 
       {
-        isHiddenCouponInput ? <></>
-          : <CouponField />
+        isHiddenCouponInput
+          ? <></>
+          : <CouponField
+            reservationCouponCode={reservation.coupon_code}
+            setReservationCouponCode={setReservationCouponCode}
+          />
       }
 
       <div className="prices">
@@ -75,18 +92,35 @@ export default function PreviewBox({ isHiddenCouponInput = true }) {
           %{scenicDetail.price_rate}
         </div>
         <div className="line-item">
-          <b>Konaklama (5 Gün)</b>
-          {displayPriceFormat(
+          <b>Konaklama ({dateDiff(reservation.end_date, reservation.start_date)} Gün)</b>
+          {/* {displayPriceFormat(
             calcSubTotalPrice(
               roomDetail.price,
               reservation.adult,
               dateDiff(reservation.end_date, reservation.start_date)
-            ))} TL
+            ))} */}
+
+          <TotalPrice
+            subTotal={true}
+            start_date={reservation.start_date}
+            end_date={reservation.end_date}
+            adult={reservation.adult}
+            price={roomDetail.price}
+          /> TL
         </div>
         {
-          coupon && coupon.discount_ammount
+          coupon && coupon.discount_ammount && reservation.coupon_code !== ""
             ? <div className="line-item">
-              <b>İndirim ({coupon.code})</b>
+              <div>
+                <b>İndirim ({coupon.code})</b>
+                {
+                  isHiddenCouponInput
+                    ? <></>
+                    : <button type="button" className="btn" onClick={() => couponCancel()} disabled={reservation.coupon_code === ""}>
+                      İPTAL ET
+                    </button>
+                }
+              </div>
               -{coupon.discount_ammount} TL
             </div>
             : <></>
@@ -95,13 +129,21 @@ export default function PreviewBox({ isHiddenCouponInput = true }) {
         <div className="divider"></div>
         <div className="total">
           <h3>Toplam Tutar</h3>
-          <h2>{displayPriceFormat(
+          <h2>{/* {displayPriceFormat(
             calcTotalPrice(roomDetail.price,
               reservation.adult,
               dateDiff(reservation.end_date, reservation.start_date),
               scenicDetail.price_rate,
-              coupon.discount_ammount
-            ))} TL
+              reservation.coupon_code !== "" ? coupon.discount_ammount : 0
+            ))} */}
+            <TotalPrice
+              start_date={reservation.start_date}
+              end_date={reservation.end_date}
+              adult={reservation.adult}
+              price={roomDetail.price}
+              price_rate={scenicDetail.price_rate}
+              discount_ammount={reservation.coupon_code !== "" ? (coupon ? coupon.discount_ammount : 0) : 0}
+            /> TL
           </h2>
         </div>
       </div>

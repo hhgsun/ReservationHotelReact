@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingBox from '../components/LoadingBox';
+import TotalPrice from '../components/TotalPrice';
 import { selectReservation, setCompletedStep, updateReservation } from '../store/registrySlice';
 import { getHotelNames, selectHotelDetailById, selectHotelNameById } from '../store/reservationSlice';
 import "../styles/SelectRoomView.scss"
 import { dateDiff, dateFormat } from '../utils/dateUtils';
-import { calcSubTotalPrice, displayPriceFormat } from '../utils/priceUtils';
 
 export default function SelectRoomView() {
   const dispatch = useDispatch();
@@ -51,7 +51,7 @@ export default function SelectRoomView() {
           <b>Giriş Tarihi:</b> {dateFormat(reservation.start_date)}
           <b>Çıkış Tarihi:</b> {dateFormat(reservation.end_date)}
           <b>Yetişkin:</b> {reservation.adult}
-          <b>Çocuk:</b> {reservation.child ? reservation.child : 'YOK'}
+          <b>Çocuk:</b> {(reservation.child && reservation.child !== "0") ? reservation.child : 'YOK'}
         </div>
       </div>
 
@@ -66,9 +66,13 @@ export default function SelectRoomView() {
               title={room.title}
               photo={room.photo}
               desc={`${dateDiff(reservation.end_date, reservation.start_date)} Gün ${reservation.adult} Yetişkin`}
-              number={`
-                ${displayPriceFormat(calcSubTotalPrice(room.price, reservation.adult, dateDiff(reservation.end_date, reservation.start_date)))} TL
-              `}
+              number={<TotalPrice
+                subTotal={true}
+                start_date={reservation.start_date}
+                end_date={reservation.end_date}
+                adult={reservation.adult}
+                price={room.price}
+              />}
               handleOptionInput={handleOptionInput}
               currentVal={reservation.room_type}
             />)

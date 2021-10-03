@@ -17,6 +17,8 @@ const initialState = {
   errorMessage: null,
   coupon: {},
   couponStatus: STATUS.idle,
+  savedBooking: {},
+  savedBookingStatus: STATUS.idle,
 };
 
 export const getHotelNames = createAsyncThunk('reservation/getHotels', async () => {
@@ -26,6 +28,26 @@ export const getHotelNames = createAsyncThunk('reservation/getHotels', async () 
 
 export const getHotelDetails = createAsyncThunk('reservation/getHotelDetails', async () => {
   const res = await client.get("/hotel-details");
+  return res;
+});
+
+export const fetchBooking = createAsyncThunk('reservation/fetch-bookings', async (id) => {
+  const res = await client.get(`hotel-bookings/${id}`);
+  return res;
+});
+
+export const sendBooking = createAsyncThunk('reservation/hotel-bookings', async (reservationData) => {
+  const res = await client.post("/hotel-bookings", reservationData);
+  return res;
+});
+
+export const sendUpdateBooking = createAsyncThunk('reservation/hotel-bookings-update', async (reservationData) => {
+  const res = await client.put(`/hotel-bookings/${reservationData['id']}`, reservationData);
+  return res;
+});
+
+export const sendDeleteBooking = createAsyncThunk('reservation/hotel-bookings-delete', async (reservationData) => {
+  const res = await client.delete(`/hotel-bookings/${reservationData['id']}`, reservationData);
   return res;
 });
 
@@ -48,7 +70,7 @@ export const reservationSlice = createSlice({
   name: 'reservation',
   initialState,
   extraReducers: (builder) => {
-    // Hotels names
+    // Hotels Names
     builder
       .addCase(getHotelNames.pending, (state) => {
         state.hotelNamesStatus = STATUS.loading;
@@ -90,6 +112,48 @@ export const reservationSlice = createSlice({
         state.couponStatus = STATUS.fail;
       })
 
+    // Booking Send
+    builder
+      .addCase(sendBooking.pending, (state) => {
+        state.savedBookingStatus = STATUS.loading;
+      })
+      .addCase(sendBooking.fulfilled, (state, action) => {
+        state.savedBooking = action.payload;
+        state.savedBookingStatus = STATUS.success;
+      })
+      .addCase(sendBooking.rejected, (state, action) => {
+        state.savedBooking = { message: action.error.message };
+        state.savedBookingStatus = STATUS.fail;
+      })
+
+    // Booking Update
+    builder
+      .addCase(sendUpdateBooking.pending, (state) => {
+        state.savedBookingStatus = STATUS.loading;
+      })
+      .addCase(sendUpdateBooking.fulfilled, (state, action) => {
+        state.savedBooking = action.payload;
+        state.savedBookingStatus = STATUS.success;
+      })
+      .addCase(sendUpdateBooking.rejected, (state, action) => {
+        state.savedBooking = { message: action.error.message };
+        state.savedBookingStatus = STATUS.fail;
+      })
+
+    // Booking Fetch
+    builder
+      .addCase(fetchBooking.pending, (state) => {
+        state.savedBookingStatus = STATUS.loading;
+      })
+      .addCase(fetchBooking.fulfilled, (state, action) => {
+        state.savedBooking = action.payload;
+        state.savedBookingStatus = STATUS.success;
+      })
+      .addCase(fetchBooking.rejected, (state, action) => {
+        state.savedBooking = { message: action.error.message };
+        state.savedBookingStatus = STATUS.fail;
+      })
+
   },
 });
 
@@ -111,6 +175,9 @@ export const selectRoomAndScenicDetail = (state, hotel_id, room_id, scenic_id) =
 
 export const selectCoupon = (state) => state.reservation.coupon;
 export const selectCouponStatus = (state) => state.reservation.couponStatus;
+
+export const selectSavedBooking = (state) => state.reservation.savedBooking;
+export const selectSavedBookingStatus = (state) => state.reservation.savedBookingStatus;
 
 export const selectErrorMessage = (state) => state.reservation.errorMessage;
 

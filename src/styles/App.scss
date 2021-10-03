@@ -44,6 +44,14 @@ ul, li {
   padding: 0;
 }
 
+.btn {
+  @include buttonStyle()
+}
+
+.alert-box {
+  padding: $section-offset-space;
+}
+
 // TODO
 /* @media (prefers-reduced-motion: no-preference) {
   .App-logo {

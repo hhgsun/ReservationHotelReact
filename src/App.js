@@ -8,7 +8,7 @@ import PreviewPaymentView from './views/PreviewPaymentView';
 import ReservationResultView from './views/ReservationResultView';
 import StepsActions from './components/StepsActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectStep } from './store/registrySlice';
+import { selectReservation, selectStep } from './store/registrySlice';
 import { getHotelDetails, selectHotelDetailsStatus, STATUS } from './store/reservationSlice';
 import LoadingBox from './components/LoadingBox';
 
@@ -16,12 +16,13 @@ function App() {
   const dispatch = useDispatch();
   const step = useSelector(selectStep)
   const hotelsDetailsStatus = useSelector(selectHotelDetailsStatus)
+  const reservation = useSelector(selectReservation)
 
   useEffect(() => {
     if (hotelsDetailsStatus === STATUS.idle) {
       dispatch(getHotelDetails());
     }
-  }, [dispatch, hotelsDetailsStatus])
+  }, [dispatch, hotelsDetailsStatus, reservation])
 
   return (
     <div className="app">

@@ -121,7 +121,7 @@ export default function SelectHotelView() {
           <input
             type="date" name="end_date"
             value={reservation.end_date} onChange={(e) => handleReservationInput(e)} disabled={hotelDetail == null}
-            min={reservation.start_date ? reservation.start_date : new Date().toISOString().split('T')[0]}
+            min={reservation.start_date ? dateAddDay(reservation.start_date) : new Date().toISOString().split('T')[0]}
           />
         </label>
 

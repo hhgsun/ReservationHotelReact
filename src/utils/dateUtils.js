@@ -1,5 +1,14 @@
 import dayjs from "dayjs";
 
+export const dateMonthsStrList = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+
+export const dateYearsStrList = () => {
+  const currYear = new Date(Date.now()).getFullYear();
+  const endYear = currYear + 10;
+  const years = Array(endYear - currYear + 1).fill().map((_, n) => (currYear + n).toString())
+  return years;
+};
+
 export function dateExpirationAt(date) {
   const d1 = dayjs(date)
   const d2 = dayjs(Date.now())

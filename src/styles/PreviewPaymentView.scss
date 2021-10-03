@@ -39,11 +39,11 @@
         span {
           margin-bottom: 5px;
         }
-        input {
+        input, select {
           padding: 5px;
         }
       }
-      footer.card-row {
+      footer.card-row, footer .card-row {
         flex-direction: row;
         justify-content: space-between;
         label {

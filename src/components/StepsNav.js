@@ -25,6 +25,7 @@ export default function Navigation() {
 
   return (
     <div className="steps-navigation">
+      {JSON.stringify(step)}:
       {JSON.stringify(completedSteps[step])}
       <ul>
         <li className={step === 0 ? 'active' : ''} onClick={() => goStepNumber(0)}>

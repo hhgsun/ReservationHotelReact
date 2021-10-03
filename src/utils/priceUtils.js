@@ -10,5 +10,5 @@ export function calcSubTotalPrice(unitPrice, adultNumber, dayNumber) {
 export function calcTotalPrice(unitPrice, adultNumber, dayNumber, effectRate, discount = 0) {
   const subTotal = calcSubTotalPrice(unitPrice, adultNumber, dayNumber);
   const ratePrice = (subTotal / 100) * Number(effectRate);
-  return subTotal + ratePrice - Number(discount);
+  return Math.round(subTotal + ratePrice - Number(discount));
 }

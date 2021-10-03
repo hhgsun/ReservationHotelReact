@@ -1,8 +1,74 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import AlertBox from '../components/AlertBox';
+import LoadingBox from '../components/LoadingBox';
 import PreviewBox from '../components/PreviewBox'
+import { initialReservationData, jumpStep, selectReservation, updateReservation } from '../store/registrySlice';
+import { fetchBooking, selectSavedBooking, selectSavedBookingStatus, sendDeleteBooking, STATUS } from '../store/reservationSlice';
 import "../styles/ReservationResultView.scss"
 
 export default function ReservationResultView() {
+  const dispatch = useDispatch();
+  const savedBookingStatus = useSelector(selectSavedBookingStatus);
+  const savedBooking = useSelector(selectSavedBooking);
+  const reservation = useSelector(selectReservation);
+  const [isCheckFetchReserv, setIsCheckFetchReserv] = useState(false)
+
+  useEffect(() => {
+    if (reservation.id && reservation.id !== "" && isCheckFetchReserv === false) {
+      if (savedBookingStatus === STATUS.idle) {
+        dispatch(fetchBooking(reservation.id));
+      } else if (savedBookingStatus === STATUS.fail) {
+        dispatch(updateReservation(initialReservationData));
+      } else if (savedBookingStatus === STATUS.success) {
+        dispatch(updateReservation(savedBooking));
+        setIsCheckFetchReserv(true);
+      }
+    }
+    if (reservation.id === "" || !reservation.id) {
+      if (savedBookingStatus === STATUS.idle) {
+        dispatch(jumpStep(2));
+      }
+      if (savedBookingStatus === STATUS.success) {
+        if (savedBooking && savedBooking.id !== null) {
+          dispatch(updateReservation({ id: savedBooking.id }));
+        }
+      }
+    }
+  }, [dispatch, reservation, savedBooking, savedBookingStatus, isCheckFetchReserv])
+
+  const newReservation = () => {
+    dispatch(updateReservation(initialReservationData));
+    dispatch(jumpStep(0));
+  }
+
+  const editReservation = () => {
+    dispatch(jumpStep(0));
+  }
+
+  const cancelReservation = () => {
+    let c = window.confirm("Rezervasyon kaydınızı iptal etmek istediğinize emin misiniz?");
+    if (c) {
+      if (reservation.id === "") {
+        return;
+      }
+      dispatch(sendDeleteBooking(reservation));
+      dispatch(updateReservation(initialReservationData))
+      dispatch(jumpStep(0));
+    }
+  }
+
+  if (savedBookingStatus === STATUS.loading) {
+    return <LoadingBox />
+  }
+
+  if (savedBookingStatus === STATUS.fail) {
+    return <div>
+      <AlertBox message={savedBooking.message} /><br />
+      <button className="btn" type="button" onClick={() => dispatch(jumpStep(2))}>GERİ DÖN</button>
+    </div>
+  }
+
   return (
     <div className="reservation-result-view">
 
@@ -16,9 +82,9 @@ export default function ReservationResultView() {
         </p>
 
         <div className="reservation-result-links">
-          <a href="#1">Yeni Rezervasyon Yap</a>
-          <a href="#2">Rezervasyonu Güncelle</a>
-          <a href="#3">Rezervasyonu İptal Et</a>
+          <a href="#1" onClick={() => newReservation()}>Yeni Rezervasyon Yap</a>
+          <a href="#2" onClick={() => editReservation()}>Rezervasyonu Güncelle</a>
+          <a href="#3" onClick={() => cancelReservation()}>Rezervasyonu İptal Et</a>
         </div>
 
       </div>

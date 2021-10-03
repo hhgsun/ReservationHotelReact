@@ -1,51 +1,35 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectReservation, updateReservation } from '../store/registrySlice';
 import { getCoupon, selectCoupon, selectCouponStatus, STATUS } from '../store/reservationSlice';
 
-export default function CouponField() {
+export default function CouponField({ reservationCouponCode, setReservationCouponCode }) {
 
   const dispatch = useDispatch();
-
-  const reservation = useSelector(selectReservation);
 
   const coupon = useSelector(selectCoupon);
   const couponStatus = useSelector(selectCouponStatus);
 
-  const [code, setCode] = useState("")
+  const [code, setCode] = useState(reservationCouponCode ? reservationCouponCode : "")
+
+
 
   useEffect(() => {
-    if (couponStatus === STATUS.success) {
-      console.log("effect1", couponStatus)
-      dispatch(updateReservation({
-        coupon_code: code
-      }));
-    } else if (couponStatus === STATUS.fail) {
-      console.log("effect1", couponStatus)
-      dispatch(updateReservation({
-        coupon_code: ""
-      }));
+    if (couponStatus === STATUS.idle && reservationCouponCode !== "") {
+      dispatch(getCoupon(reservationCouponCode));
+    } else if (couponStatus === STATUS.fail && reservationCouponCode !== "") {
+      setReservationCouponCode("")
     }
-  }, [dispatch, couponStatus, code])
-
-  useEffect(() => {
-    if (couponStatus === STATUS.idle && reservation.coupon_code !== "") {
-      console.log("effect2", couponStatus)
-      setCode(reservation.coupon_code);
-      dispatch(getCoupon(reservation.coupon_code));
-    } else if (reservation.coupon_code !== "") {
-      setCode(reservation.coupon_code)
-    }
-  }, [dispatch, reservation, couponStatus])
+  }, [dispatch, couponStatus, code, reservationCouponCode, setReservationCouponCode]);
 
   const submitCode = () => {
+    setReservationCouponCode(code);
     dispatch(getCoupon(code));
   }
 
   return (
     <>
       <div className="coupon-area">
-        <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Kupon Kodu" />
+        <input value={code} onChange={(e) => setCode(e.target.value)} disabled={couponStatus === STATUS.loading} placeholder="Kupon Kodu" />
         <button type="button" onClick={() => submitCode()} disabled={couponStatus === STATUS.loading}>Kodu Kullan</button>
       </div>
       {
